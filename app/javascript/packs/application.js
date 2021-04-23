@@ -20,9 +20,13 @@ Rails.start()
 Turbolinks.start()
 
 $(document).on('turbolinks:load', function () {
-  $('select.single').select2()
+  $('select.single').select2({
+    placeholder: 'N/A',
+    width: '100%'
+  })
   $('select.multiple').select2({
-    maximumSelectionLength: 0
+    maximumSelectionLength: 0,
+    width: '100%'
   })
   Inputmask().mask(document.querySelectorAll('input'))
 })

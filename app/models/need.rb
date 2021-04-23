@@ -15,11 +15,12 @@ class Need < ApplicationRecord
                           association_foreign_key: 'social_worker_id'
   has_many :shifts, dependent: :destroy
   has_many :users, through: :shifts
+  has_many :children, dependent: :destroy
 
-  validates :age_ranges,
-            :start_at,
+  accepts_nested_attributes_for :children, allow_destroy: true
+
+  validates :start_at,
             :expected_duration,
-            :number_of_children,
             :office,
             presence: true
   validates :expected_duration,
@@ -27,6 +28,7 @@ class Need < ApplicationRecord
                             message:                  'must be at least one hour' }
 
   validate :intentional_start_at
+  validate :at_least_one_child
 
   scope :current, lambda {
     where('start_at > ?', Time.zone.now.at_beginning_of_day)
@@ -87,10 +89,15 @@ class Need < ApplicationRecord
   # Thus, regard it as equal to the start time not being present.
   # This forces the user to select an appropriate time.
   def intentional_start_at
-    return if start_at.blank?
-    
+    return if start_at.blank?    
     if start_at == start_at.midnight
       errors.add(:start_at, 'must not be midnight')
     end
+  end
+
+  def at_least_one_child
+    return if children.any?
+
+    errors.add(:base, 'At least one child is required')
   end
 end

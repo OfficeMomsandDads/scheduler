@@ -52,7 +52,7 @@ RSpec.describe NeedsController, type: :controller do
     it 'POST create' do
       expect do
         post :create, params: {
-          need: { number_of_children:    2,
+          need: { children_attributes:   [{ age: 5, sex: 'female' }],
                   expected_duration:     2,
                   start_at:              Time.zone.now.advance(weeks: 1).to_param,
                   office_id:             need.office_id.to_param,
@@ -75,10 +75,10 @@ RSpec.describe NeedsController, type: :controller do
 
   describe '#update' do
     it 'PATCH update' do
-      patch :update, params: { id: need.id, need: { number_of_children: 2 } }
-
+      expect { 
+        patch :update, params: { id: need.id, need: { notes: 'Foobar' } }
+      }.to change { need.reload.notes }.to('Foobar')
       expect(response).to have_http_status(:found)
-      expect(need.reload.number_of_children).to equal(2)
     end
   end
 

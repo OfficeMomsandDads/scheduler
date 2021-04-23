@@ -4,8 +4,10 @@ class UpdatePreferredLanguageDefaultToEnglish < ActiveRecord::Migration[5.2]
 
   def up
     english_language = Language.find_by(name: 'English')
-    needs = Need.where(preferred_language_id: nil)
-    needs.update_all(preferred_language_id: english_language.id)
+    if english_language
+      needs = Need.where(preferred_language_id: nil)
+      needs.update_all(preferred_language_id: english_language.id)
+    end
   end
 
   def down

@@ -59,28 +59,28 @@ RSpec.describe Need, type: :model do
     let(:wa_need1) do
       create(:need_with_shifts,
              user:               wa_sw1,
-             number_of_children: 1,
+             children_count:     1,
              expected_duration:  120,
              office:             wa_office1)
     end
     let(:wa_need2) do
       create(:need_with_shifts,
              user:               wa_sw2,
-             number_of_children: 2,
+             children_count:     2,
              expected_duration:  240,
              office:             wa_office2)
     end
     let!(:unmet_wa_need) do
       create(:need_with_shifts,
              user:               wa_sw2,
-             number_of_children: 2,
+             children_count:     2,
              expected_duration:  120,
              office:             wa_office2)
     end
     let(:or_need) do
       create(:need_with_shifts,
              user:               or_sw,
-             number_of_children: 3,
+             children_count:     3,
              expected_duration:  120,
              office:             or_office)
     end

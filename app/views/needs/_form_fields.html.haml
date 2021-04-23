@@ -24,39 +24,37 @@
       .slider{ data: { slider: true, step: '0.25', start: '1', end: '9', initial_start: @need.expected_duration.to_f / 60 }, class: (action == :edit ? 'disabled' : '') }
         %span.slider-handle{ role: 'slider', data: { slider_handle: true}, tabindex: '1', aria: { controls: 'need_expected_duration' } }
         %span.slider-fill{ data: { slider_fill: true } }
+%fieldset.fieldset
+  %legend Office
+  .grid-x
+    .cell
+      = f.label :office_id do
+        = f.select :office_id, options_for_select(policy_scope(Office).map { |o| [o.name, o.id]}), { include_blank: false }, disabled: action == :edit, data: { action: 'change->new-need-form#handleOfficeChange' }
+%fieldset.fieldset
+  %legend Child Welfare Workers
+  .grid-x
+    .cell
+      = f.label :social_worker_ids do
+        %div{ data: { target: 'new-need-form.socialWorkerSelectContainer' } }
+          = render template: 'needs/office_social_workers', locals: { office: @need.office || policy_scope(Office).first }
 .grid-x
   .cell
-    = f.label :office_id do
-      Office
-      = f.select :office_id, options_for_select(policy_scope(Office).map { |o| [o.name, o.id]}), { include_blank: false }, disabled: action == :edit, data: { action: 'change->new-need-form#handleOfficeChange' }
-.grid-x
-  .cell
-    = f.label :social_worker_ids do
-      Child welfare workers
-      %div{ data: { target: 'new-need-form.socialWorkerSelectContainer' } }
-        = render template: 'needs/office_social_workers', locals: { office: @need.office || policy_scope(Office).first }
-.grid-x
-  .cell
-    = f.label :number_of_children do
-      Number of Children
-      = f.number_field :number_of_children, min: 1, max: 20, step: 1
-.grid-x
-  .cell
-    = f.label :age_range_ids do
-      Age Range of Children
-      = f.select :age_range_ids, options_for_select(AgeRange.all.each.with_object({}) { |a, o| o["#{a.min}-#{a.max}"] = a.id }, @need.age_range_ids), { include_blank: true }, {class: 'multiple', multiple: true, name: 'need[age_range_ids][]'}
-.grid-x
-  .cell
-    = f.label :race_id do
-      Preferred Culture
-      = f.select :race_id, options_for_select(race_options_for_select), { include_blank: true }, class: 'single'
-.grid-x
-  .cell
-    = f.label :preferred_language_id do
-      Preferred Language
-      = f.select :preferred_language_id, language_options_for_select, { include_blank: false }, class: 'single'
-.grid-x
-  .cell
-    = f.label :notes do
-      Notes
-      = f.text_area :notes, :rows => 6, :placeholder => 'Enter notes here'
+    = react_component("NeedChildForm/index", { children: @need.children, childSexes: Child.sexes.keys }, id: 'NeedChildForm')
+%fieldset.fieldset
+  %legend Preferred Culture
+  .grid-x
+    .cell
+      = f.label :race_id do
+        = f.select :race_id, options_for_select(race_options_for_select), { include_blank: true }, class: 'single'
+%fieldset.fieldset
+  %legend Preferred Language
+  .grid-x
+    .cell
+      = f.label :preferred_language_id do
+        = f.select :preferred_language_id, language_options_for_select, { include_blank: false }, class: 'single'
+%fieldset.fieldset
+  %legend Notes
+  .grid-x
+    .cell
+      = f.label :notes do
+        = f.text_area :notes, :rows => 6, :placeholder => 'Enter notes here'

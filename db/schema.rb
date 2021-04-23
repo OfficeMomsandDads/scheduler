@@ -72,6 +72,16 @@ ActiveRecord::Schema.define(version: 2020_10_28_212318) do
     t.index ["user_id"], name: "index_blockouts_on_user_id"
   end
 
+  create_table "children", force: :cascade do |t|
+    t.bigint "need_id", null: false
+    t.integer "age", null: false
+    t.integer "sex", null: false
+    t.text "notes"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["need_id"], name: "index_children_on_need_id"
+  end
+
   create_table "languages", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -84,7 +94,7 @@ ActiveRecord::Schema.define(version: 2020_10_28_212318) do
     t.bigint "preferred_language_id", null: false
     t.datetime "start_at", null: false
     t.integer "expected_duration", null: false
-    t.integer "number_of_children", null: false
+    t.integer "number_of_children"
     t.bigint "notified_user_ids", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
