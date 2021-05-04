@@ -109,7 +109,7 @@ group :test do
   end
 
   gem 'capybara'
-  gem 'mutant'
+  gem 'mutant', '~> 0.10.31'
   gem 'mutant-rspec'
   gem 'selenium-webdriver'
   gem 'simplecov', require: false
